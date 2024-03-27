@@ -9,4 +9,4 @@ To get the file you can
 
 To use its funtions source the file `sqlite.class.sh` in your script.
 
-**Optioal**: Copy the ini.class.sh into the vendor folder too.
+**Optional**: Copy the `ini.class.sh` into the vendor folder too.
