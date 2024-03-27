@@ -46,60 +46,6 @@ function sqlite.debugOn(){
     BSQLITE_DEBUG=1
 }
 
-# ----------------------------------------------------------------------
-
-# read the given ini file and create the tables if file does not exist yet
-# It calls sqlite.setfile <FILE> to set a default sqlite file
-#
-# param  string  filename of ini file
-function sqlite.ini(){
-    local _inifile="$1"
-    local _dbtable
-    local _sql
-
-    # sqlite._wd "${FUNCNAME[0]}($*)"
-    test -f "$_inifile" || { sqlite._wd "ERROR: File does not exist: $_inifile"; return 1; }
-    BSQLITE_FILE=$( ini.value "$_inifile" "sqlite" "file" )
-    sqlite.setfile "$BSQLITE_FILE"    
-
-    ini.sections "$_inifile" | grep "^table\." | while read -r section; do
-        _dbtable=${section//table\./}
-
-        sqlite._wd "${FUNCNAME[0]} Test table '$_dbtable' ..."
-        if ! sqlite.tableexists "$_dbtable"; then
-
-            sqlite._wd "${FUNCNAME[0]} Table '$_dbtable' does not exist yet"
-            _sql=""
-            sqlite._wd "INI section: $section --> $_dbtable"
-
-            for mykey in $( ini.keys "$_inifile" "$section" )
-            do
-                _val=$( ini.value "$_inifile" "$section" "$mykey" )
-                sqlite._wd "   $_dbtable .. $mykey = $_val"
-                test -n "$_sql" && _sql+=', '
-                _sql+="$mykey $_val"
-            done
-            _sql="CREATE TABLE $_dbtable ($_sql);"
-            sqlite.query "$_sql" || exit 1
-        else
-            sqlite._wd "${FUNCNAME[0]} Table '$_dbtable' already exists"
-        fi
-
-    done
-}
-
-# Set the sqlite file and current table name
-# You can set its parameters individually too:
-#   sqlite.setfile "$1"
-#   sqlite.settable "$2"
-#
-# param  string  filename
-# param  string  table name
-function sqlite.init(){
-    sqlite.setfile "$1"
-    sqlite.settable "$2"
-}
-
 
 # ----------------------------------------------------------------------
 # low level functions
@@ -148,6 +94,63 @@ function sqlite.queryRO(){
 }
 
 # ----------------------------------------------------------------------
+# init functions
+# ----------------------------------------------------------------------
+
+# read the given ini file and create the tables if file does not exist yet
+# It calls sqlite.setfile <FILE> to set a default sqlite file
+#
+# param  string  filename of ini file
+function sqlite.ini(){
+    local _inifile="$1"
+    local _dbtable
+    local _sql
+
+    # sqlite._wd "${FUNCNAME[0]}($*)"
+    test -f "$_inifile" || { sqlite._wd "ERROR: File does not exist: $_inifile"; return 1; }
+    BSQLITE_FILE=$( ini.value "$_inifile" "sqlite" "file" )
+    sqlite.setfile "$BSQLITE_FILE"
+
+    ini.sections "$_inifile" | grep "^table\." | while read -r section; do
+        _dbtable=${section//table\./}
+
+        sqlite._wd "${FUNCNAME[0]} Test table '$_dbtable' ..."
+        if ! sqlite.tableexists "$_dbtable"; then
+
+            sqlite._wd "${FUNCNAME[0]} Table '$_dbtable' does not exist yet"
+            _sql=""
+            sqlite._wd "INI section: $section --> $_dbtable"
+
+            for mykey in $( ini.keys "$_inifile" "$section" )
+            do
+                _val=$( ini.value "$_inifile" "$section" "$mykey" )
+                sqlite._wd "   $_dbtable .. $mykey = $_val"
+                test -n "$_sql" && _sql+=', '
+                _sql+="$mykey $_val"
+            done
+            _sql="CREATE TABLE $_dbtable ($_sql);"
+            sqlite.query "$_sql" || exit 1
+        else
+            sqlite._wd "${FUNCNAME[0]} Table '$_dbtable' already exists"
+        fi
+
+    done
+}
+
+# Set the sqlite file and current table name
+# You can set its parameters individually too:
+#   sqlite.setfile "$1"
+#   sqlite.settable "$2"
+#
+# param  string  filename
+# param  string  table name
+function sqlite.init(){
+    sqlite.setfile "$1"
+    sqlite.settable "$2"
+}
+
+
+# ----------------------------------------------------------------------
 # information functions
 # ----------------------------------------------------------------------
 
@@ -169,7 +172,7 @@ function sqlite.columnlist(){
     fi
 
     # sqlite3 example.db "SELECT GROUP_CONCAT(NAME,',') FROM PRAGMA_TABLE_INFO('users')"
-    sqlite.queryRO "$BSQLITE_FILE" "SELECT GROUP_CONCAT(NAME,',') FROM PRAGMA_TABLE_INFO('"${BSQLITE_TABLE}"')"
+    sqlite.queryRO "$BSQLITE_FILE" "SELECT GROUP_CONCAT(NAME,',') FROM PRAGMA_TABLE_INFO('${BSQLITE_TABLE}')"
 }
 
 # show columns of a table seperated with comma
