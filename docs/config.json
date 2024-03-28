@@ -1,0 +1,26 @@
+{
+    "title": "Bash sqlite functions",
+    "author": "Axel Hahn",
+    "tagline": "Bash class like functions for sqlite3",
+    "ignore": {
+        "files": ["30_PHP-client/Plugins/Checks/_skeleton.md"],
+        "folders": ["99_Not_Ready"]
+    },
+    "html": {
+        "auto_toc": true,
+        "auto_landing": false,
+        "date_modified": false,
+        "jump_buttons": true,
+        "edit_on_github": "axelhahn/bash_sqlite/tree/main/docs",
+        "edit_on_": {
+            "name": "Gitlab",
+            "basepath": "https://git-repo.iml.unibe.ch/iml-open-source/__PROJECT__/tree/master/docs"
+        },
+        "links": {
+            "Git Repo": "https://github.com/axelhahn/bash_sqlite/",
+            "Axels Docs": "https://www.axel-hahn.de/docs/bash_sqlite/"
+        },
+        "theme": "daux-blue",
+        "search": true
+    }
+}
