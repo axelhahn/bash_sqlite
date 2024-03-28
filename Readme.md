@@ -7,9 +7,7 @@ First lines ... ALPHA state. Give me some more time :-)
 
 Free software and Open source.
 
-👤 Author: Axel Hahn\
-📄 Source: https://github.com/axelhahn/bash_sqlite\
-📜 License: GNU GPL 3.0\
-<!-- 
+👤 Author: Axel Hahn \
+📄 Source: https://github.com/axelhahn/bash_sqlite \
+📜 License: GNU GPL 3.0 \
 📗 Docs: see [www.axel-hahn.de/docs](https://www.axel-hahn.de/docs/bash_sqlite/)
--->
