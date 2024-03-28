@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# --------------------------------------------------------------------
+# init
+# --------------------------------------------------------------------
+
 cd "$(dirname "$0" )" || exit 1
 
 # shellcheck disable=SC1091
@@ -8,6 +12,9 @@ cd "$(dirname "$0" )" || exit 1
 # shellcheck disable=SC1091
 . ../sqlite.class.sh || exit 1
 
+# --------------------------------------------------------------------
+# functions
+# --------------------------------------------------------------------
 
 # dump a given hash
 # param 1: hash name
@@ -23,6 +30,10 @@ function dumpHash(){
     echo "]"
 }
 
+# --------------------------------------------------------------------
+# main
+# --------------------------------------------------------------------
+
 sqlite.ini "./example.ini"
 
 # show tables
@@ -30,14 +41,18 @@ echo "--- tables"
 sqlite.tables
 echo
 
-# --- 
-# show colums if table 'users'
-# sqlite.columns "users"
 
+echo "--- colums if table 'users'"
+sqlite.columns "users"
+echo
 
-# --- 
-# # create a var "oUser" with keys from table "users"
-# eval $( sqlite.newvar "users" "oUser" )
+echo "--- create an empty dataset 'oUser' with keys from table 'users'"
+eval "$( sqlite.newvar 'users' 'oUser' )"
+dumpHash "oUser"
+
+echo "(1) You can modify its values"
+echo "(2) execute sqlite.save 'oUser' to save it to the database as new record."
+echo
 
 # echo "Keys: ${!oUser[*]}"
 # echo "Values: ${oUser[*]}"
@@ -69,3 +84,5 @@ dumpHash "oUser"
 # sqlite.delete "oUser"
 
 # sqlite.deleteById 2 "users"
+
+# --------------------------------------------------------------------
