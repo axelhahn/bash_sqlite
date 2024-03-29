@@ -323,3 +323,58 @@ An alternative function to delete a row is to give id and tablename as parameter
 ✏️ **Example**:
 
 `sqlite.deleteById 2 "users"`
+
+## Other functions
+
+### Execute query
+
+Execute a query. It will execute `sqlite3 -batch <file> <query>`. So it uses write access to the sqlite file and the default output mode.
+
+🔷 **Syntax**:
+
+`sqlite.query [<SQLITE-FILE>] "<QUERY>"`
+
+✏️ **Example**:
+
+`sqlite.query "INSERT INTO mytable (id, label) VALUES ( 7, 'New value for row #7' );`
+
+### Execute query readonly
+
+It will execute `sqlite3 -batch -readonly <file> <query>`. So it uses read access to the sqlite file and the default output mode.
+
+All SELECT statements in sqlite.class.sh (to list tables, colums, read a row) use this readonly mode.
+
+🔷 **Syntax**:
+
+`sqlite.queryRO [<SQLITE-FILE>] "<QUERY>"`
+
+✏️ **Example**:
+
+`sqlite.queryRO "SELECT * FROM mytable WHERE id=7" `
+
+### Debugging
+
+By default the debugging is off. You can switch it on with 
+`sqlite.debugOn` to get more output from the sqlite.class.sh functions. To get more output use `set -vx` in your script.
+
+`sqlite.debugOff` will switch off the debugging (but it does not `set +vx`).
+
+### Check if table exists
+
+You can check if a database tble exists.
+
+🔷 **Syntax**:
+
+`sqlite.queryRO "<TABLENAME>"`
+
+✏️ **Example**:
+
+```shell
+sqlite.setfile "example.db"
+if ! sqlite.tableexists "users"; then
+  echo "Need to create the table 'users'..."
+  # ...
+else
+  echo "OK: table 'users' exists."
+fi
+```
