@@ -23,11 +23,15 @@ function dumpHash(){
 
     local _varname=$1
     local -n _hash=$1
-    echo "$_varname = ["
-    for _key in "${!_hash[@]}"; do
-        echo "  $_key => ${_hash[$_key]}"
-    done
-    echo "]"
+    if [ "$_hash" = "" ] ; then
+        echo "$_varname = false"
+    else
+        echo "$_varname = ["
+        for _key in "${!_hash[@]}"; do
+            echo "  $_key => ${_hash[$_key]}"
+        done
+        echo "]"
+    fi
 }
 
 # --------------------------------------------------------------------
