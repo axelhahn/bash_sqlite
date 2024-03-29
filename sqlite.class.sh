@@ -10,6 +10,7 @@
 #
 # ----------------------------------------------------------------------
 # 2024-03-22  v0.01  initial version
+# 2024-03-29  v0.02  add "unset" to given var 
 # ======================================================================
 
 # ----------------------------------------------------------------------
@@ -242,7 +243,7 @@ function sqlite.settable(){
 function sqlite.newvar(){
     local _table="$1"
     local _varname="${2:-$_table}"
-    local _script="declare -A ${_varname}; ${_varname}[${BSQLITE_TABLENAME}]=${_table}; "
+    local _script="unset ${_varname}; declare -A ${_varname}; ${_varname}[${BSQLITE_TABLENAME}]=${_table}; "
 
     for col in $( sqlite.columns "$_table" ); do
         _script+="${_varname}[${col}]=; "
@@ -345,6 +346,7 @@ function sqlite.read(){
         BSQLITE_MODE=''
 
         # check if there is a json response starting with "[{"
+        echo "unset ${_varname}"
         if grep -q "^\[{" <<< "$_result"; then
             echo "declare -A ${_varname}; ${_varname}[\"${BSQLITE_TABLENAME}\"]=\"${_table}\"; "
             echo "$_result" | sed -e  's#^\[{##' -e 's#}]$##' -e 's#,"#\n"#g' -e 's#":#"]=#g' | sed 's#^#oUser\[#g'
