@@ -358,23 +358,3 @@ By default the debugging is off. You can switch it on with
 `sqlite.debugOn` to get more output from the sqlite.class.sh functions. To get more output use `set -vx` in your script.
 
 `sqlite.debugOff` will switch off the debugging (but it does not `set +vx`).
-
-### Check if table exists
-
-You can check if a database tble exists.
-
-🔷 **Syntax**:
-
-`sqlite.queryRO "<TABLENAME>"`
-
-✏️ **Example**:
-
-```shell
-sqlite.setfile "example.db"
-if ! sqlite.tableexists "users"; then
-  echo "Need to create the table 'users'..."
-  # ...
-else
-  echo "OK: table 'users' exists."
-fi
-```
