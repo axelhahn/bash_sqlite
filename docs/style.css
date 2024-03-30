@@ -157,6 +157,8 @@ h2:first-of-type {margin-top: 0em;}
 .s-content img{border: var(--axel_img-border); border-radius: 1.5em; padding: 1em; margin: 1em 0;}
 .s-content pre{
     background: var(--axel_pre-background);
+    margin: 0 -15px 20px;
+    padding-left: 15px;
 }
 
 /* FIX smaller fnt size in tables */

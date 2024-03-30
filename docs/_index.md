@@ -1,8 +1,10 @@
 <html>
 <div class="hero">
   <h2>Sqlite.class.sh</h2>
-  Bash but class like functions for sqlite3 with CRUD operations,
-  key value hashes for a single data row and a few more.
+  Bash but class like functions for sqlite3<br>
+  with CRUD operations,<br>
+  key value hashes for a single data row<br>
+  and a few more.
 
 </div>
 </html>

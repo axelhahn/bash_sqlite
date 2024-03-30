@@ -104,6 +104,135 @@ sqlite.ini simplifies a few things for you:
 * it sets the default sqlite file based on [sqlite] -> file
 * it parses the table definitions and detects every missing table to create it. BUT it does nothing if the table exists and has another definition.
 
+## CRUD
+
+### Create a new row
+
+You can get a hash with each key as column name and value as column value.
+
+🔷 **Syntax**:
+
+`eval "$( sqlite.newvar '<TABLE>' '<VARIABLE>' )"`
+
+✏️ **Example**:
+
+`eval "$( sqlite.newvar 'users' 'oUser' )"`
+
+It creates a variable with the name `oUser` and sets it to the hash.
+
+```txt
+oUser = [
+  id => 
+  groups => 
+  username => 
+  lastname => 
+  __table__ => users
+  firstname => 
+]
+```
+
+Please notice: 
+
+* `id` as primary key is empty
+* there is a special key `__table__` which contains the table name. 
+
+Now modify the keys of the hash as needed.
+
+```bash
+oUser['username']='axel'
+oUser['firstname']='Axel'
+oUser['lastname']='Hahn'
+```
+
+To store your data in the database use
+
+`sqlite.save "oUser"`
+or
+`sqlite.create "oUser"`
+
+Please notice: 
+
+* The argument is a string - the variable name of your hash
+* There is no database file -you need sqlite.setfile before
+* There is no table name - it will be taken from the internally set key `__table__`
+* the sqlite.save function detects a value in field `id` to create a new row or save (update) data of an existing row.<br>Remark: `sqlite.create "oUser"` will ignore any given id and save a new row.
+
+### Read
+
+To get a hash of a database row we can use the `id` column. To Create a hash with the values of a row we can use the eval function.
+
+🔷 **Syntax**:
+
+`eval "$( sqlite.read <tablename> <id> <variable> )"`
+
+✏️ **Example**:
+
+```bash
+eval "$( sqlite.read users 1 oUser )"
+```
+
+You get a variable `oUser` with the values of the database row with the id 1.
+
+```txt
+oUser = [
+  id => 1
+  groups => 
+  username => axel
+  lastname => Hahn
+  __table__ => users
+  firstname => Axel
+]
+```
+
+Please notice: 
+
+* `id` is now a set value - do not change it
+* `__table__` is the table name for the update - do not change it
+
+### Update
+
+🔷 **Syntax**:
+
+`sqlite.update "<variable>"`
+
+To update a row we need the variablename of the hash and use 
+
+* the `id` column to identify the row
+* the `__table__` key to identify the table
+
+✏️ **Example**:
+
+`sqlite.update "oUser"`
+
+Remark: `sqlite.save "oUser"` will do the same.
+
+### Delete
+
+Similiar to the create and update there is a delete function - it uses id of the hash to delete a row. 
+
+🔷 **Syntax**:
+
+`sqlite.delete "<variable>"`
+
+* the `id` column to identify the row
+* the `__table__` key to identify the table
+
+✏️ **Example**:
+
+`sqlite.delete "oUser"`
+
+### Delete with given id
+
+An alternative function to delete a row is to give id and tablename as parameters.
+
+🔷 **Syntax**:
+
+`sqlite.deleteById <ID> "<tablename>"`
+
+✏️ **Example**:
+
+`sqlite.deleteById 2 "users"`
+
 
 ## Information
 
@@ -194,135 +323,6 @@ returns something like
 --- column list of table 'users'
 id,groups,username,lastname,firstname
 ```
-
-## CRUD
-
-### Create a new row
-
-You can get a hash with each key as column name and value as column value.
-
-🔷 **Syntax**:
-
-`eval "$( sqlite.newvar '<TABLE>' '<VARIABLE>' )"`
-
-✏️ **Example**:
-
-`eval "$( sqlite.newvar 'users' 'oUser' )"`
-
-It creates a variable with the name `oUser` and sets it to the hash.
-
-```txt
-oUser = [
-  id => 
-  groups => 
-  username => 
-  lastname => 
-  __table__ => users
-  firstname => 
-]
-```
-
-Please notice: 
-
-* all values including  `id` as primary key are ampty
-* there is a special key `__table__` which contains the table name. 
-
-Now modify the keys of the hash as needed.
-
-```bash
-oUser['username']='axel'
-oUser['firstname']='Axel'
-oUser['lastname']='Hahn'
-```
-
-To store your data in the database use
-
-`sqlite.save "oUser"`
-or
-`sqlite.save "oUser"`
-
-Please notice: 
-
-* The argument is a string - the variable name of your hash
-* There is no database file -you need sqlite.setfile before
-* There is no table name - it will be taken from the internally set key `__table__`
-* the sqlite.save function detects a value in field `id` to create a new row or save (update) data of an existing row.<br>Remark: `sqlite.create "oUser"` will ignore any given id and save a new row.
-
-### Read
-
-To get a hash of a database row we can use the `id` column. To Create a hash with the values of a row we can use the eval function.
-
-🔷 **Syntax**:
-
-`eval "$( sqlite.read <tablename> <id> <variable> )"`
-
-✏️ **Example**:
-
-```bash
-eval "$( sqlite.read users 1 oUser )"
-```
-
-You get a variable `oUser` with the values of the database row with the id 1.
-
-```txt
-oUser = [
-  id => 1
-  groups => 
-  username => axel
-  lastname => Hahn
-  __table__ => users
-  firstname => Axel
-]
-```
-
-Please notice: 
-
-* `id` is now a set value - do not change it
-* `__table__` is the table name for the update - do not change it
-
-### Update
-
-🔷 **Syntax**:
-
-`sqlite.update "<variable>"`
-
-To update a row we need the variablename of the hash and use 
-
-* the `id` column to identify the row
-* the `__table__` key to identify the table
-
-✏️ **Example**:
-
-`sqlite.update "oUser"`
-
-Remark: `sqlite.save "oUser"` will do the same.
-
-### Delete
-
-Similiar to the create and update there is a delete function - it uses id of the hash to delete a row. 
-
-🔷 **Syntax**:
-
-`sqlite.delete "<variable>"`
-
-* the `id` column to identify the row
-* the `__table__` key to identify the table
-
-✏️ **Example**:
-
-`sqlite.delete "oUser"`
-
-### Delete with given id
-
-An alternative function to delete a row is to give id and tablename as parameters.
-
-🔷 **Syntax**:
-
-`sqlite.deleteById <ID> "<tablename>"`
-
-✏️ **Example**:
-
-`sqlite.deleteById 2 "users"`
 
 ## Other functions
 
