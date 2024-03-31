@@ -4,21 +4,21 @@
 
 ```txt
 show columns of a table each in a single line
-param  string  optional: sqlite file
-param  string  optional: table name
+param  string  can be skipped: sqlite file
+param  string  can be skipped: table name
 ```
 
-[line: 161](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L161)
+[line: 167](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L167)
 
 ### sqlite.columns()
 
 ```txt
 show columns of a table seperated with comma
-param  string  optional: sqlite file
-param  string  optional: table name
+param  string  can be skipped: sqlite file
+param  string  can be skipped: table name
 ```
 
-[line: 182](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L182)
+[line: 188](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L188)
 
 ### sqlite.create()
 
@@ -29,7 +29,7 @@ see also sqlite.save and sqlite.update
 param  string  variable name of a hash with row data to insert
 ```
 
-[line: 277](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L277)
+[line: 316](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L316)
 
 ### sqlite.debugOff()
 
@@ -37,7 +37,7 @@ param  string  variable name of a hash with row data to insert
 disable debugging
 ```
 
-[line: 42](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L42)
+[line: 43](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L43)
 
 ### sqlite.debugOn()
 
@@ -45,7 +45,7 @@ disable debugging
 enable debugging
 ```
 
-[line: 46](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L46)
+[line: 48](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L48)
 
 ### sqlite.delete()
 
@@ -54,17 +54,17 @@ Delete a record in a table by a given hash that must contain a field "id"
 param  string  variable name of a hash with row data to fetch the field "id"
 ```
 
-[line: 391](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L391)
+[line: 439](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L439)
 
 ### sqlite.deleteById()
 
 ```txt
 delete a single record in a table by a given id
+param  string   can be skipped: table name
 param  integer  id to delete
-param  string   optional: table name
 ```
 
-[line: 411](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L411)
+[line: 463](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L463)
 
 ### sqlite.getid()
 
@@ -78,7 +78,7 @@ param  string  table to search
 param  string  WHERE statement to add to the select statement
 ```
 
-[line: 307](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L307)
+[line: 352](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L352)
 
 ### sqlite.ini()
 
@@ -89,7 +89,7 @@ It calls sqlite.setfile <FILE> to set a default sqlite file
 param  string  filename of ini file
 ```
 
-[line: 105](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L105)
+[line: 108](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L108)
 
 ### sqlite.init()
 
@@ -103,7 +103,7 @@ param  string  filename
 param  string  table name
 ```
 
-[line: 148](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L148)
+[line: 153](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L153)
 
 ### sqlite.newvar()
 
@@ -114,11 +114,11 @@ USAGE:
   eval $( sqlite.newvar "users" "oUser")
   ... creates variable "oUser"
 
-param  string  table name
+param  string  can be skipped: table name
 param  string  optional: variable name (default: table name)
 ```
 
-[line: 243](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L243)
+[line: 277](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L277)
 
 ### sqlite.query()
 
@@ -126,11 +126,11 @@ param  string  optional: variable name (default: table name)
 execute a given sql query
 see also: sqlite.queryRO
 
-param  string  optional: file
+param  string  can be skipped: file
 param  string  query
 ```
 
-[line: 60](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L60)
+[line: 63](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L63)
 
 ### sqlite.queryRO()
 
@@ -139,11 +139,11 @@ Readonly query: it sets a readonly flag for the sqlite binary to execute the
 given query with readonly access
 see also: sqlite.query
 
-param  string  optional: file
+param  string  can be skipped: file
 param  string  query
 ```
 
-[line: 91](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L91)
+[line: 94](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L94)
 
 ### sqlite.read()
 
@@ -154,12 +154,31 @@ USAGE:
   eval $( sqlite.read users 1 "oUser" )
   ... creates variable "oUser" with users data of id=1
 
-param  string  table name
+param  string  can be skipped: table name
 param  string  value of id column
 param  string  optional: variable name (default: table name)
 ```
 
-[line: 328](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L328)
+[line: 375](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L375)
+
+### sqlite.rowcount()
+
+```txt
+show rowcount of a table
+param  string  can be skipped: table name
+```
+
+[line: 202](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L202)
+
+### sqlite.rows()
+
+```txt
+show rowcount of a table
+param  string  can be skipped: table name
+param  string  code to execute after the query: WHERE, ORDER, LIMIT etc.
+```
+
+[line: 212](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L212)
 
 ### sqlite.save()
 
@@ -171,7 +190,7 @@ create or update mode.
 param  string  vaiable name of a hash
 ```
 
-[line: 259](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L259)
+[line: 297](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L297)
 
 ### sqlite.setfile()
 
@@ -180,7 +199,7 @@ set sqlite file for current session
 param  string  sqlite file
 ```
 
-[line: 214](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L214)
+[line: 246](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L246)
 
 ### sqlite.settable()
 
@@ -189,7 +208,7 @@ set tablename for current session
 param  string  table name
 ```
 
-[line: 223](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L223)
+[line: 256](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L256)
 
 ### sqlite.tableexists()
 
@@ -198,7 +217,7 @@ Check if table exists; check its exitcode or use an if then
 param  string  table name
 ```
 
-[line: 197](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L197)
+[line: 229](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L229)
 
 ### sqlite.tables()
 
@@ -207,7 +226,7 @@ show tables of current sqlite file each in a single line
 param  string  optional: sqlite file
 ```
 
-[line: 188](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L188)
+[line: 194](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L194)
 
 ### sqlite.update()
 
@@ -218,5 +237,5 @@ see also sqlite.save and sqlite.create
 param  string  variable name of a hash with row data to update
 ```
 
-[line: 361](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L361)
+[line: 404](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L404)
 

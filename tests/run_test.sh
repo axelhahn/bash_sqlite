@@ -23,8 +23,8 @@ function dumpHash(){
 
     local _varname=$1
     local -n _hash=$1
-    if [ "$_hash" = "" ] ; then
-        echo "$_varname = false"
+    if [ "${_hash[*]}" = "" ] ; then
+        echo "INFO: $_varname is no hash"
     else
         echo "$_varname = ["
         for _key in "${!_hash[@]}"; do
@@ -34,10 +34,24 @@ function dumpHash(){
     fi
 }
 
+function h2(){
+    echo; echo ">>>>>>>>>> $*"; echo
+}
+
 # --------------------------------------------------------------------
 # main
 # --------------------------------------------------------------------
 
+dbfile=$( ini.value "./example.ini" sqlite file )
+echo "dbfile = $dbfile"
+test -f "$dbfile" && echo "INFO: Deleting example db $dbfile"  }
+test -f "$dbfile" && rm -f "$dbfile" 
+
+
+# sqlite.debugOn
+
+h2 "create a new database using [example.ini]"
+# sqlite.debugOn
 sqlite.ini "./example.ini"
 
 # show tables
@@ -45,14 +59,18 @@ echo "--- tables"
 sqlite.tables
 echo
 
-
 echo "--- colums if table 'users'"
-sqlite.columns "users"
+sqlite.columnlist "users"
+sqlite.columnlist
 echo
 
+h2 "create a first record"
+
 echo "--- create an empty dataset 'oUser' with keys from table 'users'"
+sqlite.newvar 'users' 'oUser'
 eval "$( sqlite.newvar 'users' 'oUser' )"
 dumpHash "oUser"
+
 
 echo "(1) You can modify its values"
 echo "(2) execute sqlite.save 'oUser' to save it to the database as new record."
@@ -61,32 +79,51 @@ echo
 # echo "Keys: ${!oUser[*]}"
 # echo "Values: ${oUser[*]}"
 
-# oUser['username']='axel'
-# oUser['firstname']='Alex'
-# oUser['lastname']='Hahn'
-# dumpHash "oUser"
-# sqlite.save "oUser"
+oUser['username']='testuser1'
+oUser['firstname']='Axel'
+oUser['lastname']='Hahn'
+dumpHash "oUser"
+echo
+sqlite.save "oUser"
+echo
+sqlite.rows 'users'
+sqlite.rowcount 'users'
 
 
-# --- 
-# # update test
-# declare -A oUser
-# oUser['id']=1
-# oUser['__table__']=users
-# oUser['firstname']='Axel2'
-# sqlite.save "oUser"
 
-# id="$( sqlite.getid users "username='axel'" )"
-# echo id=$id
+h2 "create a 2nd record"
 
-echo "--- 1st user:"
-# sqlite.debugOn
-eval "$( sqlite.read users 1 oUser )"
+oUser['username']='testuser2'
+oUser['firstname']='John'
+oUser['lastname']='Doe'
+dumpHash "oUser"
+echo
+sqlite.save "oUser"
+echo
+
+# lease notice: ther is no table name as param
+sqlite.rows
+sqlite.rowcount
+
+
+h2 "read user id 2"
+
+eval "$( sqlite.read users 2 oUser )"
 # sqlite.debugOff
 dumpHash "oUser"
-# sqlite.debugOn
-# sqlite.delete "oUser"
 
-# sqlite.deleteById 2 "users"
+h2 "update user id 2: John Doe --> John Smith"
+
+oUser['lastname']='Smith'
+dumpHash "oUser"
+sqlite.update "oUser"
+
+sqlite.rows
+
+
+h2 "delete user"
+dumpHash "oUser"
+sqlite.delete "oUser"
+sqlite.rows
 
 # --------------------------------------------------------------------

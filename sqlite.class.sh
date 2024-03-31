@@ -11,6 +11,7 @@
 # ----------------------------------------------------------------------
 # 2024-03-22  v0.01  initial version
 # 2024-03-29  v0.02  add "unset" to given var 
+# 2024-04-01  v0.03  update params in all functions
 # ======================================================================
 
 # ----------------------------------------------------------------------
@@ -40,11 +41,13 @@ function sqlite._wd(){
 
 # disable debugging
 function sqlite.debugOff(){
+    sqlite._wd "${FUNCNAME[0]}()"
     BSQLITE_DEBUG=0
 }
 # enable debugging
 function sqlite.debugOn(){
     BSQLITE_DEBUG=1
+    sqlite._wd "${FUNCNAME[0]}()"
 }
 
 
@@ -55,7 +58,7 @@ function sqlite.debugOn(){
 # execute a given sql query
 # see also: sqlite.queryRO
 #
-# param  string  optional: file
+# param  string  can be skipped: file
 # param  string  query
 function sqlite.query(){
     local _file
@@ -86,7 +89,7 @@ function sqlite.query(){
 # given query with readonly access
 # see also: sqlite.query
 #
-# param  string  optional: file
+# param  string  can be skipped: file
 # param  string  query
 function sqlite.queryRO(){
     BSQLITE_READONLY=1
@@ -107,8 +110,10 @@ function sqlite.ini(){
     local _dbtable
     local _sql
 
+    sqlite._wd "${FUNCNAME[0]}($*)"
+
     # sqlite._wd "${FUNCNAME[0]}($*)"
-    test -f "$_inifile" || { sqlite._wd "ERROR: File does not exist: $_inifile"; return 1; }
+    test -f "$_inifile" || { echo "ERROR: File does not exist: $_inifile"; return 1; }
     BSQLITE_FILE=$( ini.value "$_inifile" "sqlite" "file" )
     sqlite.setfile "$BSQLITE_FILE"
 
@@ -146,6 +151,7 @@ function sqlite.ini(){
 # param  string  filename
 # param  string  table name
 function sqlite.init(){
+    sqlite._wd "${FUNCNAME[0]}($*)"
     sqlite.setfile "$1"
     sqlite.settable "$2"
 }
@@ -156,29 +162,29 @@ function sqlite.init(){
 # ----------------------------------------------------------------------
 
 # show columns of a table each in a single line
-# param  string  optional: sqlite file
-# param  string  optional: table name
+# param  string  can be skipped: sqlite file
+# param  string  can be skipped: table name
 function sqlite.columnlist(){
     local _file
     local _table
+    local _delim
+    _delim=","
     sqlite._wd "${FUNCNAME[0]}($*)"
 
     if [ -n "$2" ]; then
         sqlite.setfile "$1"
         sqlite.settable "$2"
     else
-        if [ -n "$1" ]; then
-            sqlite.settable "$1"
-        fi
+        test -n "$1" && sqlite.settable "$1"
     fi
 
     # sqlite3 example.db "SELECT GROUP_CONCAT(NAME,',') FROM PRAGMA_TABLE_INFO('users')"
-    sqlite.queryRO "$BSQLITE_FILE" "SELECT GROUP_CONCAT(NAME,',') FROM PRAGMA_TABLE_INFO('${BSQLITE_TABLE}')"
+    sqlite.queryRO "$BSQLITE_FILE" "SELECT GROUP_CONCAT(NAME, '${_delim}') FROM PRAGMA_TABLE_INFO('${BSQLITE_TABLE}')"
 }
 
 # show columns of a table seperated with comma
-# param  string  optional: sqlite file
-# param  string  optional: table name
+# param  string  can be skipped: sqlite file
+# param  string  can be skipped: table name
 function sqlite.columns(){
     sqlite.columnlist "$1" "$2" | tr ',' "\n"
 }
@@ -186,11 +192,37 @@ function sqlite.columns(){
 # show tables of current sqlite file each in a single line
 # param  string  optional: sqlite file
 function sqlite.tables(){
-    if [ -n "$1" ]; then
-        sqlite.setfile "$1"
-    fi
+    sqlite._wd "${FUNCNAME[0]}($*)"
+    test -n "$1" && sqlite.settable "$1"
     sqlite.queryRO "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE'sqlite_%';"
 }
+
+# show rowcount of a table
+# param  string  can be skipped: table name
+function sqlite.rowcount(){
+    sqlite._wd "${FUNCNAME[0]}($*)"
+    test -n "$1" && sqlite.settable "$1"
+
+    sqlite.queryRO "select count(*) from '$BSQLITE_TABLE';"
+}
+
+# show rowcount of a table
+# param  string  can be skipped: table name
+# param  string  code to execute after the query: WHERE, ORDER, LIMIT etc.
+function sqlite.rows(){
+    local _behind=
+    sqlite._wd "${FUNCNAME[0]}($*)"
+    if [ -n "$1" ]; then
+        sqlite.settable "$1"
+        shift
+    fi
+    _behind="$1"
+
+    BSQLITE_MODE='table'
+    sqlite.queryRO "select * from '$BSQLITE_TABLE' $_behind;"
+    BSQLITE_MODE=''
+}
+
 
 # Check if table exists; check its exitcode or use an if then
 # param  string  table name
@@ -213,6 +245,7 @@ function sqlite.tableexists(){
 # param  string  sqlite file
 function sqlite.setfile(){
     local sqlite_file="$1"
+    sqlite._wd "${FUNCNAME[0]}($*)"
     BSQLITE_FILE="$sqlite_file"
     BSQLITE_TABLE=
     test ! -f "$sqlite_file" && sqlite._wd "${FUNCNAME[0]} HINT: File does not exist (yet)."
@@ -221,6 +254,7 @@ function sqlite.setfile(){
 # set tablename for current session
 # param  string  table name
 function sqlite.settable(){
+    sqlite._wd "${FUNCNAME[0]}($*)"
     if sqlite.tableexists "$1"; then
         BSQLITE_TABLE="$1"
     else
@@ -238,14 +272,18 @@ function sqlite.settable(){
 #   eval $( sqlite.newvar "users" "oUser")
 #   ... creates variable "oUser"
 #
-# param  string  table name
+# param  string  can be skipped: table name
 # param  string  optional: variable name (default: table name)
 function sqlite.newvar(){
-    local _table="$1"
-    local _varname="${2:-$_table}"
-    local _script="unset ${_varname}; declare -A ${_varname}; ${_varname}[${BSQLITE_TABLENAME}]=${_table}; "
+    sqlite._wd "${FUNCNAME[0]}($*)"
+    if [ -n "$2" ]; then
+        sqlite.settable "$1"
+        shift
+    fi
+    local _varname="${1:-$BSQLITE_TABLE}"
+    local _script="unset ${_varname}; declare -A ${_varname}; ${_varname}[${BSQLITE_TABLENAME}]=${BSQLITE_TABLE}; "
 
-    for col in $( sqlite.columns "$_table" ); do
+    for col in $( sqlite.columns "$BSQLITE_TABLE" ); do
         _script+="${_varname}[${col}]=; "
     done
     echo "$_script"
@@ -259,6 +297,7 @@ function sqlite.newvar(){
 function sqlite.save(){
     local _varname=$1
     local -n _hash=$1
+    sqlite._wd "${FUNCNAME[0]}($*)"
 
     if [ -z "${_hash[id]}" ]; then
         sqlite._wd "${FUNCNAME[0]}() No id given -> create new record"
@@ -276,12 +315,18 @@ function sqlite.save(){
 # param  string  variable name of a hash with row data to insert
 function sqlite.create(){
     local -n _hash=$1
-
     local _sql
-    local _table; _table="${_hash[${BSQLITE_TABLENAME}]}"
+    sqlite._wd "${FUNCNAME[0]}($*)"
+
+    if [ -z "${_hash[${BSQLITE_TABLENAME}]}" ]; then
+        echo "ERROR: ${FUNCNAME[0]}() No table name given"
+        return 1
+    fi
+    sqlite.settable "${_hash[${BSQLITE_TABLENAME}]}"
+
     local _collist; _collist="$( sqlite.columnlist "${_table}" | sed 's#^'${BSQLITE_ID}',##' | sed 's#,'${BSQLITE_ID}',#,#')"
     
-    sqlite._wd "${FUNCNAME[0]}() - into table $_table"
+    sqlite._wd "${FUNCNAME[0]}($*) - into table $_table"
 
     # $( sqlite.columns "${_hash[__table__]}" | tr '\n' ',' ) VALUES ('
     for _key in "${!_hash[@]}"; do
@@ -292,7 +337,7 @@ function sqlite.create(){
         _sql+="'${_hash[$_key]}'"
     done
 
-    _sql="INSERT INTO '${_hash[${BSQLITE_TABLENAME}]}' ($_collist) VALUES ( $_sql );"
+    _sql="INSERT INTO '${BSQLITE_TABLE}' ($_collist) VALUES ( $_sql );"
 
     sqlite.query "$_sql"
 }
@@ -308,10 +353,12 @@ function sqlite.getid(){
     local _table
     local _where
     local _sql
+    sqlite._wd "${FUNCNAME[0]}($*)"
+
     _table="${1:-${BSQLITE_TABLE}}"
     _where="${2:-}"
 
-    sqlite._wd "${FUNCNAME[0]}() - from table $_table"
+    sqlite._wd "${FUNCNAME[0]}($*) - from table $_table"
     _sql="select id from users where $_where ORDER by id LIMIT 0,1"
     sqlite.queryRO "$_sql"
 }
@@ -322,33 +369,29 @@ function sqlite.getid(){
 #   eval $( sqlite.read users 1 "oUser" )
 #   ... creates variable "oUser" with users data of id=1
 #
-# param  string  table name
+# param  string  can be skipped: table name
 # param  string  value of id column
 # param  string  optional: variable name (default: table name)
 function sqlite.read(){
     local _table
     local _id
-    local _varname="${2:-$_table}"
+    sqlite._wd "${FUNCNAME[0]}($*)"
     if [ -n "$2" ]; then
-        _table="${1:-${BSQLITE_TABLE}}"
-        _id="${2:-}"
-        shift; shift;
-    else
-        _table="${BSQLITE_TABLE}"
-        _id="${1:-}"
+        sqlite.settable "$1"
         shift;
     fi
-    local _varname="${1:-$_table}"
+    _id="${1:-0}"
+    local _varname="${2:-$BSQLITE_TABLE}"
     if [ -n "$_id" ]; then
         local _result
         BSQLITE_MODE='json'
-        _result="$( sqlite.queryRO "SELECT * from $_table where id=$_id" )"
+        _result="$( sqlite.queryRO "SELECT * from $BSQLITE_TABLE where id=$_id" )"
         BSQLITE_MODE=''
 
         # check if there is a json response starting with "[{"
         echo "unset ${_varname}"
         if grep -q "^\[{" <<< "$_result"; then
-            echo "declare -A ${_varname}; ${_varname}[\"${BSQLITE_TABLENAME}\"]=\"${_table}\"; "
+            echo "declare -A ${_varname}; ${_varname}[\"${BSQLITE_TABLENAME}\"]=\"${BSQLITE_TABLE}\"; "
             echo "$_result" | sed -e  's#^\[{##' -e 's#}]$##' -e 's#,"#\n"#g' -e 's#":#"]=#g' | sed 's#^#oUser\[#g'
         fi
     fi
@@ -360,12 +403,17 @@ function sqlite.read(){
 # param  string  variable name of a hash with row data to update
 function sqlite.update(){
     local -n _hash=$1
-
     local _sql
-    local _table; _table="${_hash[${BSQLITE_TABLENAME}]}"
+    sqlite._wd "${FUNCNAME[0]}($*)"
+
+    if [ -z "${_hash[${BSQLITE_TABLENAME}]}" ]; then
+        echo "ERROR: ${FUNCNAME[0]}() No table name given"
+        return 1
+    fi
+    sqlite.settable "${_hash[${BSQLITE_TABLENAME}]}"
 
     if [ -n "${_hash[${BSQLITE_ID}]}" ]; then
-        sqlite._wd "${FUNCNAME[0]}() - into table $_table"
+        sqlite._wd "${FUNCNAME[0]}() - into table $BSQLITE_TABLE"
         
         for _key in "${!_hash[@]}"; do
             test "$_key" == "${BSQLITE_TABLENAME}" && continue
@@ -374,7 +422,7 @@ function sqlite.update(){
             _sql+="$_key = '${_hash[$_key]}'"
         done
 
-        _sql="UPDATE '${_hash[${BSQLITE_TABLENAME}]}' 
+        _sql="UPDATE '${BSQLITE_TABLE}'
             SET $_sql
             WHERE ${BSQLITE_ID} = '${_hash[${BSQLITE_ID}]}';
             "
@@ -390,15 +438,19 @@ function sqlite.update(){
 # param  string  variable name of a hash with row data to fetch the field "id"
 function sqlite.delete(){
     local -n _hash=$1
-    local _table
+    local _id
 
-    sqlite._wd "${FUNCNAME[0]}() - delete by given hash"
+    sqlite._wd "${FUNCNAME[0]}($*) - delete by given hash"
+    if [ -z "${_hash[${BSQLITE_TABLENAME}]}" ]; then
+        echo "ERROR: ${FUNCNAME[0]}() No table name given"
+        return 1
+    fi
+    sqlite.settable "${_hash[${BSQLITE_TABLENAME}]}"
 
     # read the hash
-    _id=${_hash[id]}
-    _table=${_hash[${BSQLITE_TABLENAME}]}
+    _id=${_hash[${BSQLITE_ID}]}
     if [ -n "${_hash[${BSQLITE_ID}]}" ]; then
-        sqlite.deleteById "$_id" "$_table"
+        sqlite.deleteById "${BSQLITE_TABLE}" "$_id"
     else
         sqlite._wd "${FUNCNAME[0]}() - SKIP: no id given"
         return 1
@@ -406,16 +458,20 @@ function sqlite.delete(){
 }
 
 # delete a single record in a table by a given id
+# param  string   can be skipped: table name
 # param  integer  id to delete
-# param  string   optional: table name
 function sqlite.deleteById(){
-    local _id="$1"
-    local _table="${2:-${BSQLITE_TABLE}}"
+    sqlite._wd "${FUNCNAME[0]}($*)"
+    if [ -n "$2" ]; then
+        sqlite.settable "$1"
+        shift;
+    fi
+    local _id; _id="$1"
 
-    sqlite._wd "${FUNCNAME[0]}() - delete id $_id of table $_table"
+    sqlite._wd "${FUNCNAME[0]}($*) - delete id $_id of table $BSQLITE_TABLE"
 
-    if [ -n "$_id" ] || [ -n "$_table" ] || sqlite.tableexists "$_table"; then
-        _sql="DELETE FROM '$_table' 
+    if [ -n "$_id" ] || [ -n "$BSQLITE_TABLE" ] || sqlite.tableexists "$BSQLITE_TABLE"; then
+        _sql="DELETE FROM '$BSQLITE_TABLE' 
             WHERE ${BSQLITE_ID} = $_id;
             "
         sqlite.query "$_sql"

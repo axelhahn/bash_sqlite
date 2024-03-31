@@ -18,15 +18,30 @@ If you don't want to repeat the database file as argument each time, you can use
 
 `sqlite.setfile "<SQLITE-FILE>"`
 
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| SQLITE-FILE | string | The database file to be used. |
+
 This function does not stop if the file does not exist yet.
 
 `sqlite.settable "<TABLE>"`
 
 This function sets the table to be used. This can be helpful when using the CRUD functions.
 
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| TABLE       | string | The database table to set as default for next calls. |
+
+
 `sqlite.init "<SQLITE-FILE>" "<TABLE>"`
 
 This is the combination in a single function.
+
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| SQLITE-FILE | string | The database file to be used. |
+| TABLE       | string | The database table to set as default for next calls. |
+
 
 ### Create tables - raw SQL
 
@@ -34,9 +49,14 @@ Before we can insert data, we need to create a table.
 
 🔷 **Syntax**:
 
-`sqlite.query "<QUERY>"`
+`sqlite.query ["<SQLITE-FILE>"] "<QUERY>"`
 
-You can use `sqlite.query "<QUERY>"` to execute any query. Here we need the CREATE TABLE statement.
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| SQLITE-FILE | string | ⏩ can be skipped; The database file to be used. |
+| QUERY       | string | Database query to execute |
+
+You can use this function to execute any query. Here we need the CREATE TABLE statement.
 
 See https://www.sqlite.org/lang_createtable.html
 
@@ -63,6 +83,10 @@ To shorten the initialisation and table creation process, there is a function to
 🔷 **Syntax**:
 
 `sqlite.ini "<INI-FILE>"`
+
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| INI-FILE    | string | The ini file to parse. |
 
 The ini file contains
 
@@ -112,7 +136,13 @@ You can get a hash with each key as column name and value as column value.
 
 🔷 **Syntax**:
 
-`eval "$( sqlite.newvar '<TABLE>' '<VARIABLE>' )"`
+`eval "$( sqlite.newvar ['<TABLE>'] '<VARIABLE>' )"`
+
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| TABLE       | string | ⏩ can be skipped; The database table (will be set as default for next calls). |
+| VARIABLE    | string | Name of a variable to initialize. |
+
 
 ✏️ **Example**:
 
@@ -163,7 +193,13 @@ To get a hash of a database row we can use the `id` column. To Create a hash wit
 
 🔷 **Syntax**:
 
-`eval "$( sqlite.read <tablename> <id> <variable> )"`
+`eval "$( sqlite.read [<TABLE>] <ID> <VARIABLE> )"`
+
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| TABLE       | string | ⏩ can be skipped; The database table (will be set as default for next calls). |
+| ID    | string | Name of a variable to initialize. |
+| VARIABLE    | string | 🔹 optional: Name of a variable to initialize. |
 
 ✏️ **Example**:
 
@@ -193,7 +229,11 @@ Please notice:
 
 🔷 **Syntax**:
 
-`sqlite.update "<variable>"`
+`sqlite.update "<VARIABLE>"`
+
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| VARIABLE    | string | Name of a variable (that is a hash) to update. |
 
 To update a row we need the variablename of the hash and use 
 
@@ -212,7 +252,11 @@ Similiar to the create and update there is a delete function - it uses id of the
 
 🔷 **Syntax**:
 
-`sqlite.delete "<variable>"`
+`sqlite.delete "<VARIABLE>"`
+
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| VARIABLE    | string | Name of a variable (that is a hash) to delete. |
 
 * the `id` column to identify the row
 * the `__table__` key to identify the table
@@ -227,11 +271,17 @@ An alternative function to delete a row is to give id and tablename as parameter
 
 🔷 **Syntax**:
 
-`sqlite.deleteById <ID> "<tablename>"`
+`sqlite.deleteById ["<TABLE>"] <ID>`
+
+
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| TABLE       | string | ⏩ can be skipped; The database table (will be set as default for next calls). |
+| ID          | string | id to be deleted. |
 
 ✏️ **Example**:
 
-`sqlite.deleteById 2 "users"`
+`sqlite.deleteById "users" 2`
 
 
 ## Information
@@ -240,9 +290,13 @@ An alternative function to delete a row is to give id and tablename as parameter
 
 🔷 **Syntax**:
 
-`sqlite.tables ["<DB-FILE>"]`
+`sqlite.tables ["<SQLITE-FILE>"]`
 
-.. shows ech existing table seperated with a new line.
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| SQLITE-FILE | string | 🔹 optional: The database file to be used. |
+
+.. shows each existing table seperated with a new line.
 
 The optional 1st parameter overrides the file of a former `sqlite.setfile <DB-FILE>`
 
@@ -259,7 +313,12 @@ groups
 
 🔷 **Syntax**:
 
-`sqlite.tableexists "<tablename>"`
+`sqlite.tableexists "<TABLE>"`
+
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| TABLE       | string | The database table to test. |
+
 
 This function requires a set database file.
 
@@ -277,7 +336,12 @@ echo "OK: table '$tablename' was found"
 
 🔷 **Syntax**:
 
-`sqlite.columns ["<DB-FILE>"] "<tablename>"`
+`sqlite.columns ["<DB-FILE>" ["<tablename>"]]`
+
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| SQLITE-FILE | string | ⏩ can be skipped; The database file to be used. |
+| TABLE       | string | ⏩ can be skipped; The database table to test. |
 
 The optional 1st parameter overrides the file of a former `sqlite.setfile <DB-FILE>`
 
@@ -308,7 +372,12 @@ You get the same result like from sqlite.columns but in a single line.
 
 🔷 **Syntax**:
 
-`sqlite.columnlist ["<DB-FILE>"] "<tablename>"`
+`sqlite.columnlist ["<SQLITE-FILE>"] ["<TABLE>"]`
+
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| SQLITE-FILE | string | ⏩ can be skipped; The database file to be used. |
+| TABLE       | string | ⏩ can be skipped; The database table to test. |
 
 ✏️ **Example**:
 
@@ -324,6 +393,86 @@ returns something like
 id,groups,username,lastname,firstname
 ```
 
+### Show row count
+
+Show count of rows as intege of a given table.
+
+🔷 **Syntax**:
+
+`sqlite.rowcount "<TABLE>"`
+
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| TABLE       | string | ⏩ can be skipped; The database table to test. |
+
+✏️ **Example**:
+
+```bash
+sqlite.rowcount "users"
+```
+
+returns an integer
+
+```txt
+2
+```
+
+
+### Show rows
+
+Get a list of rows as a table.
+
+🔷 **Syntax**:
+
+`sqlite.rowcount "<tablename>" [FILTER]`
+
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| TABLE       | string | ⏩ can be skipped; The database table to test. |
+| FILTER      | string | 🔹 optional: A filter string to limit the output. |
+
+You get the result of `SELECT * FROM <tablename>`.
+The FILTER is an optional string that will be added in the query behind the tablename. You can limit the output with WHERE and LIMIT clauses or use ORDER to sour your output.
+
+
+✏️ **Example**:
+
+```bash
+sqlite.rows "users"
+```
+
+returns all rows of a table:
+
+```txt
++----+--------+----------+----------+-----------+
+| id | groups | username | lastname | firstname |
++----+--------+----------+----------+-----------+
+| 1  |        | axel     | Hahn     | Alex      |
+| 2  |        | berta    | Beispiel | Berta     |
++----+--------+----------+----------+-----------+
+```
+
+```bash
+sqlite.rows 'users' "ORDER by username DESC"
+```
+
+orders the output by column username in reverse order:
+
+```txt
++----+--------+----------+----------+-----------+
+| id | groups | username | lastname | firstname |
++----+--------+----------+----------+-----------+
+| 2  |        | berta    | Beispiel | Berta     |
+| 1  |        | axel     | Hahn     | Alex      |
++----+--------+----------+----------+-----------+
+```
+
+To limit the fields you can use **sqlite.queryRO** with a `SELECT` statement: 
+
+```bash
+sqlite.queryRO "SELECT id,username FROM users LIMIT 0,10"`
+```
+
 ## Other functions
 
 ### Execute query
@@ -333,6 +482,11 @@ Execute a query. It will execute `sqlite3 -batch <file> <query>`. So it uses wri
 🔷 **Syntax**:
 
 `sqlite.query [<SQLITE-FILE>] "<QUERY>"`
+
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| SQLITE-FILE | string | ⏩ can be skipped; The database file to be used. |
+| QUERY       | string | Database query to execute |
 
 ✏️ **Example**:
 
@@ -347,6 +501,11 @@ All SELECT statements in sqlite.class.sh (to list tables, colums, read a row) us
 🔷 **Syntax**:
 
 `sqlite.queryRO [<SQLITE-FILE>] "<QUERY>"`
+
+| Parameter   | Type   | Description |
+|---          |---     |--           |
+| SQLITE-FILE | string | ⏩ can be skipped; The database file to be used. |
+| QUERY       | string | Database query to execute |
 
 ✏️ **Example**:
 
