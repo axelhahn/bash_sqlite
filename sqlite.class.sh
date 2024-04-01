@@ -342,7 +342,6 @@ function sqlite.create(){
     sqlite.query "$_sql"
 }
 
-# INCOMPLETE
 # Get an id of a database record. It returns bash code
 # EXAMPLE
 #   id="$( sqlite.getid users "username='axel'" )"
@@ -366,8 +365,10 @@ function sqlite.getid(){
 # get bash code to create a hash with keys of a given table
 #
 # USAGE:
+# <code>
 #   eval $( sqlite.read users 1 "oUser" )
 #   ... creates variable "oUser" with users data of id=1
+# </code>
 #
 # param  string  can be skipped: table name
 # param  string  value of id column
