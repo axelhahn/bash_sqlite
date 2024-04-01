@@ -1,6 +1,6 @@
 ## Requirements
 
-Nothing spectacular.
+It is just Bash - nothing spectacular.
 
 * GNU Bash v4 or higher
 * sqlite3 binary in $PATH

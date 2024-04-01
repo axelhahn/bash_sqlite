@@ -27,6 +27,7 @@
     /* Axels custom values */
     --axel_bg-toc: var(--body-background);
     --axel_bg-toc-head: #f8f8f8;
+    --axel_bg-toc-border: #8ce;
     --axel_color-toc:#89a;
 
     --axel_brand-background: none;
@@ -82,6 +83,7 @@
     /* Axels custom values */
     --axel_bg-toc: var(--body-background);
     --axel_bg-toc-head: #333;
+    --axel_bg-toc-border: #256;
     
     --axel_brand-background: none;
     --axel_brand-pre-background: #69a;
@@ -209,6 +211,7 @@ div.hero p.center{text-align: center;}
 .s-content .TableOfContentsContainer h4{
     background-color: var(--axel_bg-toc-head);
     border-top-left-radius: 0.7em;
+    border-bottom: 2px solid var(--axel_bg-toc-border);
 	font-size: 1.2em;
     font-weight: bold;
     margin: 0;

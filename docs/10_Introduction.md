@@ -6,5 +6,5 @@ database.
 
 What is useful around that?
 
-* I want to handle a data row as a hash with keys of a table column
+* I want to handle a data row as a hash with keys of a corresponding table column
 * I want CRUD functions to be available for a table
