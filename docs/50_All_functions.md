@@ -4,138 +4,184 @@ List of all functions in alphabetic order
 
 ### sqlite.columnlist()
 
-<html><pre><code class="language-txt bashdoc">show columns of a table each in a single line
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">can be skipped: sqlite file</span>
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">can be skipped: table name</span>
-</code></pre></html>
+```txt
+Show columns of a table each in a single line
 
-[line: 167](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L167)
+🌐 global  string  BSQLITE_FILE   file to execute the query on
+🌐 global  string  BSQLITE_TABLE  current table name
+
+🔹 param   string  optional: (can be skipped) sqlite file
+🔹 param   string  optional: (can be skipped) table name
+```
+
+[line: 177](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L177)
 
 ### sqlite.columns()
 
-<html><pre><code class="language-txt bashdoc">show columns of a table seperated with comma
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">can be skipped: sqlite file</span>
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">can be skipped: table name</span>
-</code></pre></html>
+```txt
+Show columns of a table seperated with comma
 
-[line: 188](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L188)
+🌐 global  string  BSQLITE_FILE   file to execute the query on
+🌐 global  string  BSQLITE_TABLE  current table name
+
+🔹 param   string  optional: (can be skipped) sqlite file
+🔹 param   string  optional: (can be skipped) table name
+```
+
+[line: 202](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L202)
 
 ### sqlite.create()
 
-<html><pre><code class="language-txt bashdoc">Create a database record.
-see also sqlite.save and sqlite.update
+```txt
+Create a database record.
+👉🏼 see also sqlite.save and sqlite.update
 
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">variable name of a hash with row data to insert</span>
-</code></pre></html>
+🌐 global  string  BSQLITE_ID         constant for the key with the id
+🌐 global  string  BSQLITE_TABLE      current table name
+🌐 global  string  BSQLITE_TABLENAME  constant for the key with the table name
 
-[line: 316](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L316)
+🟩 param   string  variable name of a hash with row data to insert
+```
+
+[line: 346](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L346)
 
 ### sqlite.debugOff()
 
-<html><pre><code class="language-txt bashdoc">disable debugging
-</code></pre></html>
+```txt
+Disable debugging: turn off additional output
+👉🏼 see also: sqlite.debugOn()
+```
 
-[line: 43](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L43)
+[line: 44](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L44)
 
 ### sqlite.debugOn()
 
-<html><pre><code class="language-txt bashdoc">enable debugging
-</code></pre></html>
+```txt
+Enable debugging: show more output on STDERR
+👉🏼 see also: sqlite.debugOff()
+```
 
-[line: 48](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L48)
+[line: 50](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L50)
 
 ### sqlite.delete()
 
-<html><pre><code class="language-txt bashdoc">Delete a record in a table by a given hash that must contain a field "id"
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">variable name of a hash with row data to fetch the field "id"</span>
-</code></pre></html>
+```txt
+Delete a record in a table by a given hash that must contain a field "id"
 
-[line: 440](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L440)
+🌐 global  string  BSQLITE_ID         constant for the key with the id
+🌐 global  string  BSQLITE_TABLE      current table name
+🌐 global  string  BSQLITE_TABLENAME  constant for the key with the table name
+
+🟩 param   string  variable name of a hash with row data to fetch the field "id"
+```
+
+[line: 482](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L482)
 
 ### sqlite.deleteById()
 
-<html><pre><code class="language-txt bashdoc">delete a single record in a table by a given id
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">can be skipped: table name</span>
-<span class="prefix">param</span> <span class="type type-integer">integer</span> <span class="descr">id to delete</span>
-</code></pre></html>
+```txt
+delete a single record in a table by a given id
 
-[line: 464](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L464)
+🌐 global  string  BSQLITE_ID         constant for the key with the id
+🌐 global  string  BSQLITE_TABLE      current table name
+
+🔹 param   string   optional: (can be skipped) table name
+🟩 param   integer  id to delete
+```
+
+[line: 510](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L510)
 
 ### sqlite.getid()
 
-<html><pre><code class="language-txt bashdoc">Get an id of a database record. It returns bash code
+```txt
+Get an id of a database record. It returns bash code
 EXAMPLE
 id="$( sqlite.getid users "username='axel'" )"
 
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">table to search</span>
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">WHERE statement to add to the select statement</span>
-</code></pre></html>
+🌐 global  string  BSQLITE_TABLE      current table name
 
-[line: 351](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L351)
+🟩 param   string  table to search
+🟩 param   string  WHERE statement to add to the select statement
+```
+
+[line: 383](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L383)
 
 ### sqlite.ini()
 
-<html><pre><code class="language-txt bashdoc">read the given ini file and create the tables if file does not exist yet
+```txt
+Read the given ini file and create the tables if file does not exist yet
 It calls sqlite.setfile <FILE> to set a default sqlite file
 
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">filename of ini file</span>
-</code></pre></html>
+🟩 param  string  filename of ini file
+```
 
-[line: 108](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L108)
+[line: 114](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L114)
 
 ### sqlite.init()
 
-<html><pre><code class="language-txt bashdoc">Set the sqlite file and current table name
+```txt
+Set the sqlite file and current table name
 You can set its parameters individually too:
-sqlite.setfile "$1"
-sqlite.settable "$2"
+👉🏼 see also: sqlite.setfile
+👉🏼 see also: sqlite.settable
 
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">filename</span>
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">table name</span>
-</code></pre></html>
+🟩 param  string  filename
+🟩 param  string  table name
+```
 
-[line: 153](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L153)
+[line: 159](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L159)
 
 ### sqlite.newvar()
 
-<html><pre><code class="language-txt bashdoc">get bash code to create a hash with keys of a given table
+```txt
+get bash code to create a hash with keys of a given table
 
 USAGE:
 eval $( sqlite.newvar "users" "oUser")
 ... creates variable "oUser"
 
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">can be skipped: table name</span>
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">optional: variable name (default: table name)</span>
-</code></pre></html>
+🌐 global  string  BSQLITE_TABLE      current table name
+🌐 global  string  BSQLITE_TABLENAME  constant for the key with the table name
 
-[line: 277](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L277)
+🔹 param   string  optional: (can be skipped) table name
+🔹 param   string  optional: variable name (default: table name)
+```
+
+[line: 303](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L303)
 
 ### sqlite.query()
 
-<html><pre><code class="language-txt bashdoc">execute a given sql query
-see also: sqlite.queryRO
+```txt
+Execute a given sql query on the given file
+👉🏼 see also: sqlite.queryRO()
 
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">can be skipped: file</span>
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">query</span>
-</code></pre></html>
+🌐 global  string  BSQLITE_FILE  file to execute the query on
 
-[line: 63](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L63)
+🔹 param   string  optional: (can be skipped) file
+🟩 param   string  query
+```
+
+[line: 67](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L67)
 
 ### sqlite.queryRO()
 
-<html><pre><code class="language-txt bashdoc">Readonly query: it sets a readonly flag for the sqlite binary to execute the
+```txt
+Readonly query: it sets a readonly flag for the sqlite binary to execute the
 given query with readonly access
-see also: sqlite.query
+👉🏼 see also: sqlite.query()
 
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">can be skipped: file</span>
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">query</span>
-</code></pre></html>
+🌐 global  string  BSQLITE_FILE  file to execute the query on
 
-[line: 94](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L94)
+🔹 param   string  optional: (can be skipped) file
+🟩 param   string  query
+```
+
+[line: 100](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L100)
 
 ### sqlite.read()
 
-<html><pre><code class="language-txt bashdoc">get bash code to create a hash with keys of a given table
+```txt
+get bash code to create a hash with keys of a given table
 
 USAGE:
 <code>
@@ -143,80 +189,102 @@ eval $( sqlite.read users 1 "oUser" )
 ... creates variable "oUser" with users data of id=1
 </code>
 
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">can be skipped: table name</span>
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">value of id column</span>
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">optional: variable name (default: table name)</span>
-</code></pre></html>
+🌐 global  string  BSQLITE_TABLE      current table name
 
-[line: 376](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L376)
+🔹 param  string  optional: (can be skipped) table name
+🟩 param  string  value of id column
+🔹 param  string  optional: variable name (default: table name)
+```
+
+[line: 410](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L410)
 
 ### sqlite.rowcount()
 
-<html><pre><code class="language-txt bashdoc">show rowcount of a table
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">can be skipped: table name</span>
-</code></pre></html>
+```txt
+show rowcount of a table
 
-[line: 202](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L202)
+🌐 global  string  BSQLITE_TABLE  current table name
+
+🔹 param   string  optional: (can be skipped) table name
+```
+
+[line: 222](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L222)
 
 ### sqlite.rows()
 
-<html><pre><code class="language-txt bashdoc">show rowcount of a table
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">can be skipped: table name</span>
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">code to execute after the query: WHERE, ORDER, LIMIT etc.</span>
-</code></pre></html>
+```txt
+show rowcount of a table
 
-[line: 212](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L212)
+🌐 global  string  BSQLITE_TABLE  current table name
+
+🔹 param   string  optional: (can be skipped) table name
+🟩 param   string  code to execute after the query: WHERE, ORDER, LIMIT etc.
+```
+
+[line: 235](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L235)
 
 ### sqlite.save()
 
-<html><pre><code class="language-txt bashdoc">Store a given variable of a hash in the database.
+```txt
+Store a given variable of a hash in the database.
 The save function detects the given id to switch between the
 create or update mode.
 
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">vaiable name of a hash</span>
-</code></pre></html>
+🟩 param  string  vaiable name of a hash
+```
 
-[line: 297](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L297)
+[line: 323](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L323)
 
 ### sqlite.setfile()
 
-<html><pre><code class="language-txt bashdoc">set sqlite file for current session
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">sqlite file</span>
-</code></pre></html>
+```txt
+set sqlite file for current session
+🟩 param  string  sqlite file
+```
 
-[line: 246](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L246)
+[line: 269](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L269)
 
 ### sqlite.settable()
 
-<html><pre><code class="language-txt bashdoc">set tablename for current session
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">table name</span>
-</code></pre></html>
+```txt
+set tablename for current session. The table must exist to set it.
+🟩 param  string  table name
+```
 
-[line: 256](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L256)
+[line: 279](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L279)
 
 ### sqlite.tableexists()
 
-<html><pre><code class="language-txt bashdoc">Check if table exists; check its exitcode or use an if then
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">table name</span>
-</code></pre></html>
+```txt
+Check if table exists; check its exitcode or use an if then
+🟩 param  string  table name
+```
 
-[line: 229](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L229)
+[line: 252](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L252)
 
 ### sqlite.tables()
 
-<html><pre><code class="language-txt bashdoc">show tables of current sqlite file each in a single line
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">optional: sqlite file</span>
-</code></pre></html>
+```txt
+show tables of current sqlite file each in a single line
 
-[line: 194](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L194)
+🌐 global  string  BSQLITE_TABLE  current table name
+
+🔹 param   string  optional: sqlite file
+```
+
+[line: 211](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L211)
 
 ### sqlite.update()
 
-<html><pre><code class="language-txt bashdoc">Update a record in a table
-see also sqlite.save and sqlite.create
+```txt
+Update a record in a table
+👉🏼 see also sqlite.save and sqlite.create
 
-<span class="prefix">param</span> <span class="type type-string">string</span> <span class="descr">variable name of a hash with row data to update</span>
-</code></pre></html>
+🌐 global  string  BSQLITE_TABLE      current table name
+🌐 global  string  BSQLITE_TABLENAME  constant for the key with the table name
 
-[line: 405](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L405)
+🟩 param   string  variable name of a hash with row data to update
+```
+
+[line: 442](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L442)
 

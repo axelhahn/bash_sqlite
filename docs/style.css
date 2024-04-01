@@ -1,7 +1,7 @@
 /*
 
     patch css elements of daux.io blue theme
-    version 2023-10-09
+    version 2024-04-01
 
 */
 
@@ -188,17 +188,6 @@ article nav{border-top: var(--axel-article-nav-border-top); margin: 8em 0 5em;}
 div.hero{background: var(--axel_hero_bg);border-radius: 2em; padding: 5em 2em;text-align: center;} 
 div.hero h2{background: none; _border: none; text-align: center; font-size: 300%; margin: 0 0 2em;}
 div.hero p.center{text-align: center;}
-
-/* ---------- classes bashdoc ---------- */
-
-code.bashdoc{color: #888;}
-
-code.bashdoc code{background: rgba(255,255,255,0.7);}
-code .prefix{}
-code .type{color: #088;}
-code .type-string{color: #008;}
-code .descr{color: #080;}
-
 
 /* ---------- TOC ---------- */
 @media(min-width:1700px){
