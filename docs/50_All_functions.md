@@ -7,8 +7,8 @@ List of all functions in alphabetic order
 ```txt
 Show columns of a table each in a single line
 
-🌐 global  string  BSQLITE_FILE   file to execute the query on
-🌐 global  string  BSQLITE_TABLE  current table name
+🌐 global  string  $BSQLITE_FILE   file to execute the query on
+🌐 global  string  $BSQLITE_TABLE  current table name
 
 🔹 param   string  optional: (can be skipped) sqlite file
 🔹 param   string  optional: (can be skipped) table name
@@ -21,8 +21,8 @@ Show columns of a table each in a single line
 ```txt
 Show columns of a table seperated with comma
 
-🌐 global  string  BSQLITE_FILE   file to execute the query on
-🌐 global  string  BSQLITE_TABLE  current table name
+🌐 global  string  $BSQLITE_FILE   file to execute the query on
+🌐 global  string  $BSQLITE_TABLE  current table name
 
 🔹 param   string  optional: (can be skipped) sqlite file
 🔹 param   string  optional: (can be skipped) table name
@@ -36,9 +36,9 @@ Show columns of a table seperated with comma
 Create a database record.
 👉🏼 see also sqlite.save and sqlite.update
 
-🌐 global  string  BSQLITE_ID         constant for the key with the id
-🌐 global  string  BSQLITE_TABLE      current table name
-🌐 global  string  BSQLITE_TABLENAME  constant for the key with the table name
+🌐 global  string  $BSQLITE_ID         constant for the key with the id
+🌐 global  string  $BSQLITE_TABLE      current table name
+🌐 global  string  $BSQLITE_TABLENAME  constant for the key with the table name
 
 🟩 param   string  variable name of a hash with row data to insert
 ```
@@ -68,9 +68,9 @@ Enable debugging: show more output on STDERR
 ```txt
 Delete a record in a table by a given hash that must contain a field "id"
 
-🌐 global  string  BSQLITE_ID         constant for the key with the id
-🌐 global  string  BSQLITE_TABLE      current table name
-🌐 global  string  BSQLITE_TABLENAME  constant for the key with the table name
+🌐 global  string  $BSQLITE_ID         constant for the key with the id
+🌐 global  string  $BSQLITE_TABLE      current table name
+🌐 global  string  $BSQLITE_TABLENAME  constant for the key with the table name
 
 🟩 param   string  variable name of a hash with row data to fetch the field "id"
 ```
@@ -82,8 +82,8 @@ Delete a record in a table by a given hash that must contain a field "id"
 ```txt
 delete a single record in a table by a given id
 
-🌐 global  string  BSQLITE_ID         constant for the key with the id
-🌐 global  string  BSQLITE_TABLE      current table name
+🌐 global  string  $BSQLITE_ID         constant for the key with the id
+🌐 global  string  $BSQLITE_TABLE      current table name
 
 🔹 param   string   optional: (can be skipped) table name
 🟩 param   integer  id to delete
@@ -98,7 +98,7 @@ Get an id of a database record. It returns bash code
 EXAMPLE
 id="$( sqlite.getid users "username='axel'" )"
 
-🌐 global  string  BSQLITE_TABLE      current table name
+🌐 global  string  $BSQLITE_TABLE      current table name
 
 🟩 param   string  table to search
 🟩 param   string  WHERE statement to add to the select statement
@@ -140,8 +140,8 @@ USAGE:
 eval $( sqlite.newvar "users" "oUser")
 ... creates variable "oUser"
 
-🌐 global  string  BSQLITE_TABLE      current table name
-🌐 global  string  BSQLITE_TABLENAME  constant for the key with the table name
+🌐 global  string  $BSQLITE_TABLE      current table name
+🌐 global  string  $BSQLITE_TABLENAME  constant for the key with the table name
 
 🔹 param   string  optional: (can be skipped) table name
 🔹 param   string  optional: variable name (default: table name)
@@ -155,7 +155,7 @@ eval $( sqlite.newvar "users" "oUser")
 Execute a given sql query on the given file
 👉🏼 see also: sqlite.queryRO()
 
-🌐 global  string  BSQLITE_FILE  file to execute the query on
+🌐 global  string  $BSQLITE_FILE  file to execute the query on
 
 🔹 param   string  optional: (can be skipped) file
 🟩 param   string  query
@@ -170,7 +170,7 @@ Readonly query: it sets a readonly flag for the sqlite binary to execute the
 given query with readonly access
 👉🏼 see also: sqlite.query()
 
-🌐 global  string  BSQLITE_FILE  file to execute the query on
+🌐 global  string  $BSQLITE_FILE  file to execute the query on
 
 🔹 param   string  optional: (can be skipped) file
 🟩 param   string  query
@@ -189,7 +189,7 @@ eval $( sqlite.read users 1 "oUser" )
 ... creates variable "oUser" with users data of id=1
 </code>
 
-🌐 global  string  BSQLITE_TABLE      current table name
+🌐 global  string  $BSQLITE_TABLE      current table name
 
 🔹 param  string  optional: (can be skipped) table name
 🟩 param  string  value of id column
@@ -203,7 +203,7 @@ eval $( sqlite.read users 1 "oUser" )
 ```txt
 show rowcount of a table
 
-🌐 global  string  BSQLITE_TABLE  current table name
+🌐 global  string  $BSQLITE_TABLE  current table name
 
 🔹 param   string  optional: (can be skipped) table name
 ```
@@ -215,7 +215,7 @@ show rowcount of a table
 ```txt
 show rowcount of a table
 
-🌐 global  string  BSQLITE_TABLE  current table name
+🌐 global  string  $BSQLITE_TABLE  current table name
 
 🔹 param   string  optional: (can be skipped) table name
 🟩 param   string  code to execute after the query: WHERE, ORDER, LIMIT etc.
@@ -267,7 +267,7 @@ Check if table exists; check its exitcode or use an if then
 ```txt
 show tables of current sqlite file each in a single line
 
-🌐 global  string  BSQLITE_TABLE  current table name
+🌐 global  string  $BSQLITE_TABLE  current table name
 
 🔹 param   string  optional: sqlite file
 ```
@@ -280,8 +280,8 @@ show tables of current sqlite file each in a single line
 Update a record in a table
 👉🏼 see also sqlite.save and sqlite.create
 
-🌐 global  string  BSQLITE_TABLE      current table name
-🌐 global  string  BSQLITE_TABLENAME  constant for the key with the table name
+🌐 global  string  $BSQLITE_TABLE      current table name
+🌐 global  string  $BSQLITE_TABLENAME  constant for the key with the table name
 
 🟩 param   string  variable name of a hash with row data to update
 ```

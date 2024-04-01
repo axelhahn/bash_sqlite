@@ -60,7 +60,7 @@ function sqlite.debugOn(){
 # Execute a given sql query on the given file
 # see also: sqlite.queryRO()
 #
-# global  string  BSQLITE_FILE  file to execute the query on
+# global  string  $BSQLITE_FILE  file to execute the query on
 #
 # param   string  optional: (can be skipped) file
 # param   string  query
@@ -93,7 +93,7 @@ function sqlite.query(){
 # given query with readonly access
 # see also: sqlite.query()
 #
-# global  string  BSQLITE_FILE  file to execute the query on
+# global  string  $BSQLITE_FILE  file to execute the query on
 #
 # param   string  optional: (can be skipped) file
 # param   string  query
@@ -169,8 +169,8 @@ function sqlite.init(){
 
 # Show columns of a table each in a single line
 #
-# global  string  BSQLITE_FILE   file to execute the query on
-# global  string  BSQLITE_TABLE  current table name
+# global  string  $BSQLITE_FILE   file to execute the query on
+# global  string  $BSQLITE_TABLE  current table name
 #
 # param   string  optional: (can be skipped) sqlite file
 # param   string  optional: (can be skipped) table name
@@ -194,8 +194,8 @@ function sqlite.columnlist(){
 
 # Show columns of a table seperated with comma
 #
-# global  string  BSQLITE_FILE   file to execute the query on
-# global  string  BSQLITE_TABLE  current table name
+# global  string  $BSQLITE_FILE   file to execute the query on
+# global  string  $BSQLITE_TABLE  current table name
 #
 # param   string  optional: (can be skipped) sqlite file
 # param   string  optional: (can be skipped) table name
@@ -205,7 +205,7 @@ function sqlite.columns(){
 
 # show tables of current sqlite file each in a single line
 #
-# global  string  BSQLITE_TABLE  current table name
+# global  string  $BSQLITE_TABLE  current table name
 #
 # param   string  optional: sqlite file
 function sqlite.tables(){
@@ -216,7 +216,7 @@ function sqlite.tables(){
 
 # show rowcount of a table
 #
-# global  string  BSQLITE_TABLE  current table name
+# global  string  $BSQLITE_TABLE  current table name
 #
 # param   string  optional: (can be skipped) table name
 function sqlite.rowcount(){
@@ -228,7 +228,7 @@ function sqlite.rowcount(){
 
 # show rowcount of a table
 #
-# global  string  BSQLITE_TABLE  current table name
+# global  string  $BSQLITE_TABLE  current table name
 #
 # param   string  optional: (can be skipped) table name
 # param   string  code to execute after the query: WHERE, ORDER, LIMIT etc.
@@ -295,8 +295,8 @@ function sqlite.settable(){
 #   eval $( sqlite.newvar "users" "oUser")
 #   ... creates variable "oUser"
 #
-# global  string  BSQLITE_TABLE      current table name
-# global  string  BSQLITE_TABLENAME  constant for the key with the table name
+# global  string  $BSQLITE_TABLE      current table name
+# global  string  $BSQLITE_TABLENAME  constant for the key with the table name
 #
 # param   string  optional: (can be skipped) table name
 # param   string  optional: variable name (default: table name)
@@ -338,9 +338,9 @@ function sqlite.save(){
 # Create a database record.
 # see also sqlite.save and sqlite.update
 #
-# global  string  BSQLITE_ID         constant for the key with the id
-# global  string  BSQLITE_TABLE      current table name
-# global  string  BSQLITE_TABLENAME  constant for the key with the table name
+# global  string  $BSQLITE_ID         constant for the key with the id
+# global  string  $BSQLITE_TABLE      current table name
+# global  string  $BSQLITE_TABLENAME  constant for the key with the table name
 #
 # param   string  variable name of a hash with row data to insert
 function sqlite.create(){
@@ -376,7 +376,7 @@ function sqlite.create(){
 # EXAMPLE
 #   id="$( sqlite.getid users "username='axel'" )"
 #
-# global  string  BSQLITE_TABLE      current table name
+# global  string  $BSQLITE_TABLE      current table name
 #
 # param   string  table to search
 # param   string  WHERE statement to add to the select statement
@@ -402,7 +402,7 @@ function sqlite.getid(){
 #   ... creates variable "oUser" with users data of id=1
 # </code>
 #
-# global  string  BSQLITE_TABLE      current table name
+# global  string  $BSQLITE_TABLE      current table name
 #
 # param  string  optional: (can be skipped) table name
 # param  string  value of id column
@@ -435,8 +435,8 @@ function sqlite.read(){
 # Update a record in a table
 # see also sqlite.save and sqlite.create
 #
-# global  string  BSQLITE_TABLE      current table name
-# global  string  BSQLITE_TABLENAME  constant for the key with the table name
+# global  string  $BSQLITE_TABLE      current table name
+# global  string  $BSQLITE_TABLENAME  constant for the key with the table name
 #
 # param   string  variable name of a hash with row data to update
 function sqlite.update(){
@@ -474,9 +474,9 @@ function sqlite.update(){
 
 # Delete a record in a table by a given hash that must contain a field "id"
 #
-# global  string  BSQLITE_ID         constant for the key with the id
-# global  string  BSQLITE_TABLE      current table name
-# global  string  BSQLITE_TABLENAME  constant for the key with the table name
+# global  string  $BSQLITE_ID         constant for the key with the id
+# global  string  $BSQLITE_TABLE      current table name
+# global  string  $BSQLITE_TABLENAME  constant for the key with the table name
 #
 # param   string  variable name of a hash with row data to fetch the field "id"
 function sqlite.delete(){
@@ -502,8 +502,8 @@ function sqlite.delete(){
 
 # delete a single record in a table by a given id
 #
-# global  string  BSQLITE_ID         constant for the key with the id
-# global  string  BSQLITE_TABLE      current table name
+# global  string  $BSQLITE_ID         constant for the key with the id
+# global  string  $BSQLITE_TABLE      current table name
 #
 # param   string   optional: (can be skipped) table name
 # param   integer  id to delete
