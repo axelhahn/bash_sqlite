@@ -47,6 +47,7 @@ echo "dbfile = $dbfile"
 test -f "$dbfile" && echo "INFO: Deleting example db $dbfile"  }
 test -f "$dbfile" && rm -f "$dbfile" 
 
+# ....................................................................
 
 # sqlite.debugOn
 
@@ -64,6 +65,8 @@ sqlite.columnlist "users"
 sqlite.columnlist
 echo
 
+# ....................................................................
+
 h2 "create a first record"
 
 echo "--- create an empty dataset 'oUser' with keys from table 'users'"
@@ -71,13 +74,9 @@ sqlite.newvar 'users' 'oUser'
 eval "$( sqlite.newvar 'users' 'oUser' )"
 dumpHash "oUser"
 
-
 echo "(1) You can modify its values"
 echo "(2) execute sqlite.save 'oUser' to save it to the database as new record."
 echo
-
-# echo "Keys: ${!oUser[*]}"
-# echo "Values: ${oUser[*]}"
 
 oUser['username']='testuser1'
 oUser['firstname']='Axel'
@@ -89,7 +88,7 @@ echo
 sqlite.rows 'users'
 sqlite.rowcount 'users'
 
-
+# ....................................................................
 
 h2 "create a 2nd record"
 
@@ -105,12 +104,15 @@ echo
 sqlite.rows
 sqlite.rowcount
 
+# ....................................................................
 
 h2 "read user id 2"
 
 eval "$( sqlite.read users 2 oUser )"
 # sqlite.debugOff
 dumpHash "oUser"
+
+# ....................................................................
 
 h2 "update user id 2: John Doe --> John Smith"
 
@@ -120,10 +122,14 @@ sqlite.update "oUser"
 
 sqlite.rows
 
+# ....................................................................
 
 h2 "delete user"
 dumpHash "oUser"
 sqlite.delete "oUser"
 sqlite.rows
+
+echo
+echo "DONE."
 
 # --------------------------------------------------------------------
