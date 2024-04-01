@@ -14,7 +14,7 @@
 They abstract `sqlite3 [options] <DB-FILE> <COMMAND|SQL>`
 Using these functions is optional. 
 
-First lines ... ALPHA state. Give me some more time :-)
+First lines ... BETA state. Give me some more time :-)
 
 Free software and Open source.
 

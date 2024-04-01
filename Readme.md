@@ -3,7 +3,7 @@
 Bash but class like functions for sqlite3 with CRUD operations,
 key value hashes for a single data row and a few more.
 
-First lines ... ALPHA state. Give me some more time :-)
+First lines ... BETA state. Give me some more time :-)
 
 Free software and Open source.
 
