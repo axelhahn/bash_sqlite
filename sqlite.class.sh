@@ -33,7 +33,7 @@ BSQLITE_DEBUG=0
 # FUNCTIONS :: DEGUGGING
 # ----------------------------------------------------------------------
 
-# write debug output to STDERR if BSQLITE_DEBUG is 1
+# Write debug output to STDERR if BSQLITE_DEBUG is 1
 # param  string  text to show
 function sqlite._wd(){
     test $BSQLITE_DEBUG -ne 0 && echo "$BSQLITE_SELF: $*" >&2
@@ -203,7 +203,7 @@ function sqlite.columns(){
     sqlite.columnlist "$1" "$2" | tr ',' "\n"
 }
 
-# show tables of current sqlite file each in a single line
+# Show tables of current sqlite file each in a single line
 #
 # global  string  $BSQLITE_TABLE  current table name
 #
@@ -214,7 +214,7 @@ function sqlite.tables(){
     sqlite.queryRO "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE'sqlite_%';"
 }
 
-# show rowcount of a table
+# Show rowcount of a table
 #
 # global  string  $BSQLITE_TABLE  current table name
 #
@@ -226,7 +226,7 @@ function sqlite.rowcount(){
     sqlite.queryRO "select count(*) from '$BSQLITE_TABLE';"
 }
 
-# show rowcount of a table
+# Show rowcount of a table
 #
 # global  string  $BSQLITE_TABLE  current table name
 #
@@ -264,7 +264,7 @@ function sqlite.tableexists(){
 # SETTERS
 # ----------------------------------------------------------------------
 
-# set sqlite file for current session
+# Set sqlite file for current session
 # param  string  sqlite file
 function sqlite.setfile(){
     local sqlite_file="$1"
@@ -289,7 +289,7 @@ function sqlite.settable(){
 # CRUD actions
 # ----------------------------------------------------------------------
 
-# get bash code to create a hash with keys of a given table
+# Get bash code to create a hash with keys of a given table
 #
 # USAGE:
 #   eval $( sqlite.newvar "users" "oUser")
@@ -394,7 +394,7 @@ function sqlite.getid(){
     sqlite.queryRO "$_sql"
 }
 
-# get bash code to create a hash with keys of a given table
+# Get bash code to create a hash with keys of a given table.
 #
 # USAGE:
 # <code>
@@ -404,9 +404,9 @@ function sqlite.getid(){
 #
 # global  string  $BSQLITE_TABLE      current table name
 #
-# param  string  optional: (can be skipped) table name
-# param  string  value of id column
-# param  string  optional: variable name (default: table name)
+# param   string  optional: (can be skipped) table name
+# param   string  value of id column
+# param   string  optional: variable name (default: table name)
 function sqlite.read(){
     local _table
     local _id
@@ -500,7 +500,7 @@ function sqlite.delete(){
     fi
 }
 
-# delete a single record in a table by a given id
+# Delete a single record in a table by a given id
 #
 # global  string  $BSQLITE_ID         constant for the key with the id
 # global  string  $BSQLITE_TABLE      current table name

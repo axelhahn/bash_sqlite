@@ -80,7 +80,7 @@ Delete a record in a table by a given hash that must contain a field "id"
 ### sqlite.deleteById()
 
 ```txt
-delete a single record in a table by a given id
+Delete a single record in a table by a given id
 
 🌐 global  string  $BSQLITE_ID         constant for the key with the id
 🌐 global  string  $BSQLITE_TABLE      current table name
@@ -134,7 +134,7 @@ You can set its parameters individually too:
 ### sqlite.newvar()
 
 ```txt
-get bash code to create a hash with keys of a given table
+Get bash code to create a hash with keys of a given table
 
 USAGE:
 eval $( sqlite.newvar "users" "oUser")
@@ -181,7 +181,7 @@ given query with readonly access
 ### sqlite.read()
 
 ```txt
-get bash code to create a hash with keys of a given table
+Get bash code to create a hash with keys of a given table.
 
 USAGE:
 <code>
@@ -191,9 +191,9 @@ eval $( sqlite.read users 1 "oUser" )
 
 🌐 global  string  $BSQLITE_TABLE      current table name
 
-🔹 param  string  optional: (can be skipped) table name
-🟩 param  string  value of id column
-🔹 param  string  optional: variable name (default: table name)
+🔹 param   string  optional: (can be skipped) table name
+🟩 param   string  value of id column
+🔹 param   string  optional: variable name (default: table name)
 ```
 
 [line: 410](https://github.com/axelhahn/bash_sqlite/blob/main/sqlite.class.sh#L410)
@@ -201,7 +201,7 @@ eval $( sqlite.read users 1 "oUser" )
 ### sqlite.rowcount()
 
 ```txt
-show rowcount of a table
+Show rowcount of a table
 
 🌐 global  string  $BSQLITE_TABLE  current table name
 
@@ -213,7 +213,7 @@ show rowcount of a table
 ### sqlite.rows()
 
 ```txt
-show rowcount of a table
+Show rowcount of a table
 
 🌐 global  string  $BSQLITE_TABLE  current table name
 
@@ -238,7 +238,7 @@ create or update mode.
 ### sqlite.setfile()
 
 ```txt
-set sqlite file for current session
+Set sqlite file for current session
 🟩 param  string  sqlite file
 ```
 
@@ -265,7 +265,7 @@ Check if table exists; check its exitcode or use an if then
 ### sqlite.tables()
 
 ```txt
-show tables of current sqlite file each in a single line
+Show tables of current sqlite file each in a single line
 
 🌐 global  string  $BSQLITE_TABLE  current table name
 
