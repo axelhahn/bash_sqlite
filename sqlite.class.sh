@@ -39,12 +39,14 @@ function sqlite._wd(){
     test $BSQLITE_DEBUG -ne 0 && echo "$BSQLITE_SELF: $*" >&2
 }
 
-# disable debugging
+# Disable debugging: turn off additional output
+# see also: sqlite.debugOn()
 function sqlite.debugOff(){
     sqlite._wd "${FUNCNAME[0]}()"
     BSQLITE_DEBUG=0
 }
-# enable debugging
+# Enable debugging: show more output on STDERR
+# see also: sqlite.debugOff()
 function sqlite.debugOn(){
     BSQLITE_DEBUG=1
     sqlite._wd "${FUNCNAME[0]}()"
@@ -55,11 +57,13 @@ function sqlite.debugOn(){
 # low level functions
 
 
-# execute a given sql query
-# see also: sqlite.queryRO
+# Execute a given sql query on the given file
+# see also: sqlite.queryRO()
 #
-# param  string  can be skipped: file
-# param  string  query
+# global  string  BSQLITE_FILE  file to execute the query on
+#
+# param   string  optional: (can be skipped) file
+# param   string  query
 function sqlite.query(){
     local _file
     local _query
@@ -87,10 +91,12 @@ function sqlite.query(){
 
 # Readonly query: it sets a readonly flag for the sqlite binary to execute the
 # given query with readonly access
-# see also: sqlite.query
+# see also: sqlite.query()
 #
-# param  string  can be skipped: file
-# param  string  query
+# global  string  BSQLITE_FILE  file to execute the query on
+#
+# param   string  optional: (can be skipped) file
+# param   string  query
 function sqlite.queryRO(){
     BSQLITE_READONLY=1
     sqlite.query "$1" "$2"
@@ -101,7 +107,7 @@ function sqlite.queryRO(){
 # init functions
 # ----------------------------------------------------------------------
 
-# read the given ini file and create the tables if file does not exist yet
+# Read the given ini file and create the tables if file does not exist yet
 # It calls sqlite.setfile <FILE> to set a default sqlite file
 #
 # param  string  filename of ini file
@@ -145,8 +151,8 @@ function sqlite.ini(){
 
 # Set the sqlite file and current table name
 # You can set its parameters individually too:
-#   sqlite.setfile "$1"
-#   sqlite.settable "$2"
+# see also: sqlite.setfile
+# see also: sqlite.settable
 #
 # param  string  filename
 # param  string  table name
@@ -161,9 +167,13 @@ function sqlite.init(){
 # information functions
 # ----------------------------------------------------------------------
 
-# show columns of a table each in a single line
-# param  string  can be skipped: sqlite file
-# param  string  can be skipped: table name
+# Show columns of a table each in a single line
+#
+# global  string  BSQLITE_FILE   file to execute the query on
+# global  string  BSQLITE_TABLE  current table name
+#
+# param   string  optional: (can be skipped) sqlite file
+# param   string  optional: (can be skipped) table name
 function sqlite.columnlist(){
     local _file
     local _table
@@ -182,15 +192,22 @@ function sqlite.columnlist(){
     sqlite.queryRO "$BSQLITE_FILE" "SELECT GROUP_CONCAT(NAME, '${_delim}') FROM PRAGMA_TABLE_INFO('${BSQLITE_TABLE}')"
 }
 
-# show columns of a table seperated with comma
-# param  string  can be skipped: sqlite file
-# param  string  can be skipped: table name
+# Show columns of a table seperated with comma
+#
+# global  string  BSQLITE_FILE   file to execute the query on
+# global  string  BSQLITE_TABLE  current table name
+#
+# param   string  optional: (can be skipped) sqlite file
+# param   string  optional: (can be skipped) table name
 function sqlite.columns(){
     sqlite.columnlist "$1" "$2" | tr ',' "\n"
 }
 
 # show tables of current sqlite file each in a single line
-# param  string  optional: sqlite file
+#
+# global  string  BSQLITE_TABLE  current table name
+#
+# param   string  optional: sqlite file
 function sqlite.tables(){
     sqlite._wd "${FUNCNAME[0]}($*)"
     test -n "$1" && sqlite.settable "$1"
@@ -198,7 +215,10 @@ function sqlite.tables(){
 }
 
 # show rowcount of a table
-# param  string  can be skipped: table name
+#
+# global  string  BSQLITE_TABLE  current table name
+#
+# param   string  optional: (can be skipped) table name
 function sqlite.rowcount(){
     sqlite._wd "${FUNCNAME[0]}($*)"
     test -n "$1" && sqlite.settable "$1"
@@ -207,8 +227,11 @@ function sqlite.rowcount(){
 }
 
 # show rowcount of a table
-# param  string  can be skipped: table name
-# param  string  code to execute after the query: WHERE, ORDER, LIMIT etc.
+#
+# global  string  BSQLITE_TABLE  current table name
+#
+# param   string  optional: (can be skipped) table name
+# param   string  code to execute after the query: WHERE, ORDER, LIMIT etc.
 function sqlite.rows(){
     local _behind=
     sqlite._wd "${FUNCNAME[0]}($*)"
@@ -251,7 +274,7 @@ function sqlite.setfile(){
     test ! -f "$sqlite_file" && sqlite._wd "${FUNCNAME[0]} HINT: File does not exist (yet)."
 }
 
-# set tablename for current session
+# set tablename for current session. The table must exist to set it.
 # param  string  table name
 function sqlite.settable(){
     sqlite._wd "${FUNCNAME[0]}($*)"
@@ -272,8 +295,11 @@ function sqlite.settable(){
 #   eval $( sqlite.newvar "users" "oUser")
 #   ... creates variable "oUser"
 #
-# param  string  can be skipped: table name
-# param  string  optional: variable name (default: table name)
+# global  string  BSQLITE_TABLE      current table name
+# global  string  BSQLITE_TABLENAME  constant for the key with the table name
+#
+# param   string  optional: (can be skipped) table name
+# param   string  optional: variable name (default: table name)
 function sqlite.newvar(){
     sqlite._wd "${FUNCNAME[0]}($*)"
     if [ -n "$2" ]; then
@@ -312,7 +338,11 @@ function sqlite.save(){
 # Create a database record.
 # see also sqlite.save and sqlite.update
 #
-# param  string  variable name of a hash with row data to insert
+# global  string  BSQLITE_ID         constant for the key with the id
+# global  string  BSQLITE_TABLE      current table name
+# global  string  BSQLITE_TABLENAME  constant for the key with the table name
+#
+# param   string  variable name of a hash with row data to insert
 function sqlite.create(){
     local -n _hash=$1
     local _sql
@@ -346,8 +376,10 @@ function sqlite.create(){
 # EXAMPLE
 #   id="$( sqlite.getid users "username='axel'" )"
 #
-# param  string  table to search
-# param  string  WHERE statement to add to the select statement
+# global  string  BSQLITE_TABLE      current table name
+#
+# param   string  table to search
+# param   string  WHERE statement to add to the select statement
 function sqlite.getid(){
     local _table
     local _where
@@ -370,7 +402,9 @@ function sqlite.getid(){
 #   ... creates variable "oUser" with users data of id=1
 # </code>
 #
-# param  string  can be skipped: table name
+# global  string  BSQLITE_TABLE      current table name
+#
+# param  string  optional: (can be skipped) table name
 # param  string  value of id column
 # param  string  optional: variable name (default: table name)
 function sqlite.read(){
@@ -401,7 +435,10 @@ function sqlite.read(){
 # Update a record in a table
 # see also sqlite.save and sqlite.create
 #
-# param  string  variable name of a hash with row data to update
+# global  string  BSQLITE_TABLE      current table name
+# global  string  BSQLITE_TABLENAME  constant for the key with the table name
+#
+# param   string  variable name of a hash with row data to update
 function sqlite.update(){
     local -n _hash=$1
     local _sql
@@ -436,7 +473,12 @@ function sqlite.update(){
 }
 
 # Delete a record in a table by a given hash that must contain a field "id"
-# param  string  variable name of a hash with row data to fetch the field "id"
+#
+# global  string  BSQLITE_ID         constant for the key with the id
+# global  string  BSQLITE_TABLE      current table name
+# global  string  BSQLITE_TABLENAME  constant for the key with the table name
+#
+# param   string  variable name of a hash with row data to fetch the field "id"
 function sqlite.delete(){
     local -n _hash=$1
     local _id
@@ -459,8 +501,12 @@ function sqlite.delete(){
 }
 
 # delete a single record in a table by a given id
-# param  string   can be skipped: table name
-# param  integer  id to delete
+#
+# global  string  BSQLITE_ID         constant for the key with the id
+# global  string  BSQLITE_TABLE      current table name
+#
+# param   string   optional: (can be skipped) table name
+# param   integer  id to delete
 function sqlite.deleteById(){
     sqlite._wd "${FUNCNAME[0]}($*)"
     if [ -n "$2" ]; then
