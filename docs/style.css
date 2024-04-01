@@ -20,6 +20,11 @@
     --sidebar-background:var(--body-background);
     --sidebar-border-color: none;
     --sidebar-link-active-background: #f8f6f0;
+    
+    --table-border: #ddd;
+    --table-header-background: #d8e0e8;
+    --table-header-background: #d8e8e8;
+    --table-background-odd: #f8f7f5;
 
     --code-tag-background-color: #f0f4f8;
     --code-tag-border-color: rgba(0,0,0,0.05);
@@ -53,12 +58,10 @@
 
     --axel_img-border: 2px dashed #cbc;
 
-    --axel_nav-bg:#fcfcfc;
+    --axel_nav-bg: #fcfcfc;
     --axel_nav-buttomborder: #ddd;
 
-    --axel_pre-background: #f8f6f4;
     --axel_pre-background: #f8f7f5;
-    --axel-th-background: #d0e0e8;
     --axel-article-nav-border-top: 0px dotted #ddd;
 }
 
@@ -114,7 +117,6 @@
     --axel_nav-buttomborder: #555;
     --axel_pre-background: #bcc;
 
-    --axel-th-background: #203038;
     --axel-article-nav-border-top: 0px dotted #234;
 }
 
@@ -167,9 +169,6 @@ h2:first-of-type {margin-top: 0em;}
 .s-content table {
 	font-size: 1em;
 }
-.s-content table th{
-    background: var(--axel-th-background);
-}
 
 .s-content h3 code{border: none; background: none; }
 
@@ -190,8 +189,15 @@ div.hero{background: var(--axel_hero_bg);border-radius: 2em; padding: 5em 2em;te
 div.hero h2{background: none; _border: none; text-align: center; font-size: 300%; margin: 0 0 2em;}
 div.hero p.center{text-align: center;}
 
+/* ---------- classes bashdoc ---------- */
 
-/* ---------- classes ---------- */
+code.bashdoc{color: #888;}
+
+code.bashdoc code{background: rgba(255,255,255,0.7);}
+code .prefix{}
+code .type{color: #088;}
+code .type-string{color: #008;}
+code .descr{color: #080;}
 
 
 /* ---------- TOC ---------- */
