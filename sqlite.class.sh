@@ -12,6 +12,7 @@
 # 2024-03-22  v0.01  initial version
 # 2024-03-29  v0.02  add "unset" to given var 
 # 2024-04-01  v0.03  update params in all functions
+# 2024-04-02  v0.04  parse vars in sqlite.ini sqlite -> file 
 # ======================================================================
 
 # ----------------------------------------------------------------------
@@ -121,6 +122,7 @@ function sqlite.ini(){
     # sqlite._wd "${FUNCNAME[0]}($*)"
     test -f "$_inifile" || { echo "ERROR: File does not exist: $_inifile"; return 1; }
     BSQLITE_FILE=$( ini.value "$_inifile" "sqlite" "file" )
+    eval "BSQLITE_FILE=$BSQLITE_FILE"
     sqlite.setfile "$BSQLITE_FILE"
 
     ini.sections "$_inifile" | grep "^table\." | while read -r section; do
